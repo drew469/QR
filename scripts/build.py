@@ -155,6 +155,7 @@ def normalise(item, lookup):
         "duration": round(item["videoDuration"]) if item.get("videoDuration") else None,
         "caption": caption[:300],
         "image": item.get("displayUrl"),
+        "video": item.get("videoUrl") if kind == "reel" else None,  # temporary CDN link, used by transcribe.py
         "last_seen": NOW.isoformat(),
     }
 

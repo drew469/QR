@@ -39,6 +39,14 @@ jobs:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
         run: python scripts/build.py ${{ inputs.bootstrap && '--bootstrap' || '' }} --from-run "${{ inputs.apify_run_id }}"
 
+      - name: Transcribe proof-of-concept reels (hook + script for the daily reel task)
+        continue-on-error: true
+        timeout-minutes: 25
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg tesseract-ocr > /dev/null
+          pip install -q faster-whisper
+          python scripts/transcribe.py
+
       - name: Save post history
         run: |
           git config user.name "dashboard-bot"

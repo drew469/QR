@@ -97,12 +97,23 @@ def main():
                 log(f"skip {p['code']} (@{p['owner']}): download failed: {e}")
                 continue
             wav = os.path.join(wd, "a.wav")
-            has_audio = run(["ffmpeg", "-v", "error", "-y", "-i", vid, "-vn", "-ac", "1", "-ar", "16000", wav]).returncode == 0
+            has_audio = run(["ffmpeg", "-v", "error", "-y", "-i", vid, "-vn", "-ac", "1", "-ar", "16000", "-c:a", "pcm_s16le", wav]).returncode == 0
             segs = []
             if has_audio and os.path.exists(wav):
-                pieces, _ = model.transcribe(wav, vad_filter=True, beam_size=1)
-                segs = [{"start": round(s.start, 2), "end": round(s.end, 2), "text": s.text.strip()} for s in pieces]
-            onscreen = ocr_frames(vid, wd)
+                try:
+                    # decode ourselves: newer PyAV breaks faster-whisper's own decoder
+                    import wave, numpy as np
+                    with wave.open(wav) as w:
+                        audio = np.frombuffer(w.readframes(w.getnframes()), dtype=np.int16).astype(np.float32) / 32768.0
+                    pieces, _ = model.transcribe(audio, vad_filter=True, beam_size=1)
+                    segs = [{"start": round(s.start, 2), "end": round(s.end, 2), "text": s.text.strip()} for s in pieces]
+                except Exception as e:
+                    log(f"speech failed for {p['code']}: {e}")
+            try:
+                onscreen = ocr_frames(vid, wd)
+            except Exception as e:
+                log(f"ocr failed for {p['code']}: {e}")
+                onscreen = []
             hook_spoken = " ".join(s["text"] for s in segs if s["start"] < 3.0).strip()
             done[p["code"]] = {
                 "url": p["url"], "owner": p["owner"], "group": p.get("group"),

@@ -62,6 +62,8 @@ def ocr_frames(video, workdir):
 
 
 def main():
+    global OWN
+    OWN = {h.lower().lstrip("@") for h in json.loads(open("config.json").read()).get("own_handles", [])}
     history = json.loads(build.HISTORY_PATH.read_text())
     done = json.loads(OUT.read_text()) if OUT.exists() else {}
     scored = build.score_posts(history)
@@ -69,6 +71,8 @@ def main():
     todo = []
     for p in scored:
         if p.get("kind") != "reel" or p["code"] in done or not p.get("video"):
+            continue
+        if p.get("owner", "").lower() in OWN:  # our own reels are never a proof of concept
             continue
         if build.parse_ts(p["posted"]) < cutoff:
             continue

@@ -131,6 +131,8 @@ def normalise(item, lookup):
         return None
     if kind == "image" and not CONFIG["scoring"]["include_single_images"]:
         return None
+    if kind == "carousel" and not CONFIG["scoring"].get("include_carousels", True):
+        return None
     owner = owner_of(item, lookup)
     if owner not in lookup:
         return None
@@ -176,6 +178,8 @@ def merge(history, fresh):
         history["posts"][post["code"]] = merged
     cutoff = NOW - dt.timedelta(days=CONFIG["scoring"]["baseline_days"] + 2)
     history["posts"] = {c: p for c, p in history["posts"].items() if parse_ts(p["posted"]) >= cutoff}
+    if not CONFIG["scoring"].get("include_carousels", True):
+        history["posts"] = {c: p for c, p in history["posts"].items() if p.get("kind") != "carousel"}
     return history
 
 

@@ -5,8 +5,30 @@
     "quiet.fortune"
   ],
   "groups": {
+    "Animated explainers": [
+      "devatalks_ai",
+      "adilet.fndr",
+      "aiminutes1",
+      "aiboostlab",
+      "omarontape"
+    ],
+    "Face + screen explainers": [
+      "build.with.alan",
+      "zachdoesai_",
+      "stj.taneja",
+      "chase.h.ai",
+      "michaelpkocher",
+      "brand.nat",
+      "iojeet",
+      "nocode.joshua",
+      "albert.olgaard",
+      "itsmariahbrunner",
+      "ai.zygis",
+      "champmack",
+      "tessa.fairbrook",
+      "iggykos"
+    ],
     "Claude content creators": [
-      "corbinsylk",
       "ultra.skills",
       "theaigeekk",
       "jayantcreates.ai",
@@ -19,10 +41,7 @@
       "getripping"
     ],
     "AI Animated Reels": [
-      "chiefagent.ai",
-      "cindiezhu",
       "itsbethcarr",
-      "power.ai",
       "bigmoneybanj"
     ],
     "Mine": [
@@ -30,16 +49,12 @@
     ],
     "AI tips & news": [
       "evolving.ai",
-      "getintoai",
       "furiouslytech",
       "chatgptricks",
       "innovation",
-      "chatgptips",
       "itsaiguide",
       "thesartificialintelligence",
-      "techskills",
-      "lawoftech",
-      "aiupdates.hub"
+      "lawoftech"
     ]
   },
   "apify": {
